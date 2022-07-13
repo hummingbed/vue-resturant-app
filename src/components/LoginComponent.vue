@@ -27,39 +27,49 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 export default {
   name: "LoginComponent",
-  data(){
-    return{
-        email: '',
-        password: ''
-    }
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
   },
   methods: {
-    login(e){
-        e.preventDefault();
-        let url = `http://localhost:3000/user?email=${this.email}&password=${this.password}`;
-        axios.get(url)
+    login(e) {
+      e.preventDefault();
+      let url = `http://localhost:3000/user?email=${this.email}&password=${this.password}`;
+      axios
+        .get(url)
         .then((response) => {
-          console.log(response );
-          if (response.data[0].email == this.email && response.data[0].password) {
+          console.log(response);
+          if (
+            response.data[0].email == this.email &&
+            response.data[0].password
+          ) {
             console.log("response succsss");
             localStorage.setItem("user-info", JSON.stringify(response.data));
             this.$router.push({ name: "Home" });
             return response;
           }
         })
-         .catch((error) => {
+        .catch((error) => {
           error.message;
           console.error("There was an error!", error);
         });
-        
-    }
+    },
   },
-  mounted(){
-     console.log('response')
-  }
+  mounted() {
+    let user = localStorage.getItem("user-info");
+    if (user) {
+      console.log("exist");
+      this.$router.push({ name: "Home" });
+    } else {
+      console.log("dont exist");
+    }
+    console.log("response");
+  },
 };
 </script>
 
